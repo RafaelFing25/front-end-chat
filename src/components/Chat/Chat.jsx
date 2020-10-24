@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import io from 'socket.io-client'
+import {NameContext} from '../../contexts/NameContext'
 
 import './Chat.css'
 
@@ -19,11 +20,12 @@ function Chat() {
     const [restCaracters, setrestCaracters] = useState(200)
     const [change, setChange] = useState(0)
     const [users, updateUsers] = useState(0)
-    const [userName, setUserName] = useState('')
     const [message, setMessage] = useState('')
     const [messages, updateMessages] = useState([])
-
+    const Context = useContext(NameContext)
    
+  
+ 
     
     useEffect(() => {
         const handleNewMessage = newMessage =>
@@ -51,7 +53,6 @@ function Chat() {
                 
                 const censura = '*'.repeat(value.length)
                 newMessage = newMessage.replace(regExp, censura)
-                console.log(newMessage)
             })
 
 
@@ -60,7 +61,7 @@ function Chat() {
 
 
             socket.emit('chat.message', {
-                userName: userName,
+                userName: Context.name,
                 id: socket.id,
                 message: newMessage
             })
@@ -99,9 +100,6 @@ function Chat() {
             })
         })
     }, [change])
-    function hanldeUserNameChange(e) {
-        setUserName(e.target.value)
-    }
 
     const messagesEndRef = useRef(null)
 
@@ -125,11 +123,11 @@ function Chat() {
                     </li>
                 ))}
             </ul>
-            <input
+            {/* <input
                 className="form__field"
                 onChange={hanldeUserNameChange}
                 placeholder='Seu nome'
-                value={userName} />
+                value={userName} /> */}
             <form className="form" onSubmit={handleFormSubmit} >
                 <input
                     maxLength='200'

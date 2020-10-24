@@ -1,12 +1,11 @@
 import React from 'react';
-import Chat from './components/Chat/Chat';
+
+import Routes from './Rotes';
 
 
 function App() {
   return (
-    <div >
-      <Chat />
-    </div>
+    <Routes/>
   );
 }
 
