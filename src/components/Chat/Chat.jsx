@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client'
 
 import './Chat.css'
-import uuid from 'uuid'
+import uuid from 'uuid/dist/v4'
 
 
 const socket = io('https://mychatback.herokuapp.com/')
