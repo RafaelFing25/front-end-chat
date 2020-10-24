@@ -40,7 +40,7 @@ function Chat() {
     function censureWords() {
         if (message.trim()) {
             const blockedWords = [
-                'fdp', 'vsfd', 'teste'
+                'fdp', 'vsfd', 'teste', 'Fdp', 'f d p', 'FDP'
             ]
             var newMessage
             newMessage = message
