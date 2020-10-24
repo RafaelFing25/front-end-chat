@@ -45,10 +45,10 @@ function Chat() {
             var newMessage
             newMessage = message
             blockedWords.forEach((value, index) => {
-                console.log(value)
+              
 
                 const regExp = new RegExp(`${value}`, 'g')
-                console.log(regExp)
+                
                 const censura = '*'.repeat(value.length)
                 newMessage = newMessage.replace(regExp, censura)
                 console.log(newMessage)
