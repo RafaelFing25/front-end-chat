@@ -21,8 +21,10 @@ function Home() {
       onChange={handleInputChange}
       value={name}
       />
+      
+      <Link to="/chat">
       <button type='button' onClick={handleSubmit}>Ok</button>
-      <Link to="/chat">Ir para o chat</Link>
+      </Link>
     </div>;
 }
 
