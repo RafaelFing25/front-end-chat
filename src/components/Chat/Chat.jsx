@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client'
 
 import './Chat.css'
-//import uuid from 'uuid'
+import uuid from 'uuid'
+
 
 const socket = io('https://mychatback.herokuapp.com/')
 socket.on('connect', () => {
@@ -15,7 +16,6 @@ socket.on('connect', () => {
 
 function Chat() {
     // const ref = useRef(null)
-    const [censuredWord, setCesnsuredWord] = useState('')
     const [restCaracters, setrestCaracters] = useState(200)
     const [change, setChange] = useState(0)
     const [users, updateUsers] = useState(0)
@@ -23,7 +23,8 @@ function Chat() {
     const [message, setMessage] = useState('')
     const [messages, updateMessages] = useState([])
 
-
+    const id = uuid()
+    
     useEffect(() => {
         const handleNewMessage = newMessage =>
             updateMessages([...messages, newMessage])
@@ -61,6 +62,7 @@ function Chat() {
             socket.emit('chat.message', {
                 userName: userName,
                 id: socket.id,
+                idU: id,
                 message: newMessage
             })
 
@@ -117,8 +119,8 @@ function Chat() {
             <small className='users'>Ususarios online: {users}</small>
             <ul className='list' ref={messagesEndRef}>
                 {messages.map((m, i) => (
-                    <li className={`list__item list__item--${m.userName === userName ? 'mine' : 'other'}`} key={i}>
-                        <span className={`message message--${m.userName === userName ? 'mine' : 'other'}`}>
+                    <li className={`list__item list__item--${m.idU === id ? 'mine' : 'other'}`} key={i}>
+                        <span className={`message message--${m.idU === id ? 'mine' : 'other'}`}>
                             <small className="username">{m.userName}</small>
                             {m.message}
                         </span>
