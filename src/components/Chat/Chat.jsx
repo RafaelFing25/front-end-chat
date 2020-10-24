@@ -73,7 +73,7 @@ function Chat() {
     function handleFormSubmit(e) {
         e.preventDefault()
         censureWords()
-
+        setrestCaracters(200)
         setMessage('')
     }
 
@@ -106,7 +106,6 @@ function Chat() {
     const messagesEndRef = useRef(null)
 
     const scrollToBottom = () => {
-        console.log('scroll')
         messagesEndRef.current.scrollTop = 99999999
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
     }
