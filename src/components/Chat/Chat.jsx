@@ -6,7 +6,7 @@ import './Chat.css'
 
 
 
-const socket = io('https://mychatbackend/')
+const socket = io('https://mychatback.herokuapp.com/')
 socket.on('connect',()=>{
         console.log('conectato ao soket.io')
     })
