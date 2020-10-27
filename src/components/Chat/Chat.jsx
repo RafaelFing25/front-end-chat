@@ -155,7 +155,12 @@ function Chat() {
         <div className="usersname">
         <h1>Usuarios online</h1>
         {users.map((user) => {
-            return <small> {user.Name} </small>
+            return (
+                <>
+                <hr/>
+            <small className='usersname'> {user.Name} </small>
+            </>
+            )
         })}
         </div>
         </div>
