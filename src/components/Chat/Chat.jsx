@@ -1,31 +1,42 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import io from 'socket.io-client'
-import {NameContext} from '../../contexts/NameContext'
+import { UserContext } from '../../contexts/UserContext'
 
 import './Chat.css'
 
 
 
-const socket = io('https://mychatback.herokuapp.com/')
-socket.on('connect', () => {
-    console.log(socket.id)
-    //socket.emit()
-})
+const socket = io('http://localhost:8080/')
+socket.on('connect',()=>{
+        console.log('conectato ao soket.io')
+    })
 
 
 
 
-function Chat() {
+function Chat() { 
+    
     // const ref = useRef(null)
     const [restCaracters, setrestCaracters] = useState(200)
     const [change, setChange] = useState(0)
-    const [users, updateUsers] = useState(0)
+    const [users, updateUsers] = useState([])
     const [message, setMessage] = useState('')
     const [messages, updateMessages] = useState([])
-    const Context = useContext(NameContext)
+    const [User, setUser] = useState([])
+    const Context = useContext(UserContext)
    
   
- 
+    useEffect(()=>{
+        
+        const user = Context.user
+        const MyUser = {
+            ...user,
+            socketId: socket.id,
+        }
+        setUser(MyUser)
+        socket.emit('userConnect', MyUser)
+    },[Context.user])
+    
     
     useEffect(() => {
         const handleNewMessage = newMessage =>
@@ -61,8 +72,8 @@ function Chat() {
 
 
             socket.emit('chat.message', {
-                userName: Context.name,
-                id: socket.id,
+                user: User,
+                messageId: socket.id,
                 message: newMessage
             })
 
@@ -85,21 +96,22 @@ function Chat() {
         return () => clearInterval(interval);
     }, [change]);
 
-
-
     useEffect(() => {
-        console.log('ola')
-        socket.on('userdesconect', users => {
-            updateUsers(users)
-        })
-        socket.on('onlineUsers', users => {
-            updateUsers(users)
-            console.log(users)
-            return socket.off('onlineUsers', (users) => {
-                updateUsers(users)
-            })
-        })
+        const handleNewMessage = newMessage =>
+            updateUsers(newMessage)
+        socket.on('onlineUsers', handleNewMessage)
+        return () => socket.off('onlineUsers', handleNewMessage)
     }, [change])
+
+ 
+    useEffect(() => {
+
+        const handleUserDisconnect = users =>
+                updateUsers(users)
+        socket.on('userdesconect',handleUserDisconnect)
+            return () => socket.off('userdesconect', handleUserDisconnect)
+        
+    },[change,users])
 
     const messagesEndRef = useRef(null)
 
@@ -107,17 +119,17 @@ function Chat() {
         messagesEndRef.current.scrollTop = 99999999
         messagesEndRef.current.scrollIntoView({ behavior: "smooth" })
     }
-
     useEffect(scrollToBottom, [messages]);
-
+    console.log('context' , Context, 'contextUser', Context.user)
     return (
+        < div className="chat-all">
         <main className='container' >
-            <small className='users'>Ususarios online: {users}</small>
+            <small className='users'>Ususarios online: {users.length}</small>
             <ul className='list' ref={messagesEndRef}>
                 {messages.map((m, i) => (
-                    <li className={`list__item list__item--${m.id === socket.id ? 'mine' : 'other'}`} key={i}>
-                        <span className={`message message--${m.id === socket.id ? 'mine' : 'other'}`}>
-                            <small className="username">{m.userName}</small>
+                    <li className={`list__item list__item--${m.user.socketId === User.socketId ? 'mine' : 'other'}`} key={i}>
+                        <span className={`message message--${m.user.socketId ===User.socketId ? 'mine' : 'other'}`}>
+                            <small className="username">{m.user.Name}</small>
                             {m.message}
                         </span>
                     </li>
@@ -140,6 +152,14 @@ function Chat() {
 
             </form>
         </main>
+        <div className="usersname">
+        <h1>Usuarios online</h1>
+        {users.map((user) => {
+            return <small> {user.Name} </small>
+        })}
+        </div>
+        </div>
+
     )
 }
 

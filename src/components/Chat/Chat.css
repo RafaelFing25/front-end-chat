@@ -101,3 +101,11 @@
   .users{
     color:white;
   }
+
+  .chat-all{
+    display:flex;
+    align-items: center;
+  }
+  .usersname{
+    display:block;
+  }

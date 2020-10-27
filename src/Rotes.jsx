@@ -3,17 +3,17 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Chat from './components/Chat/Chat';
 import Home from "./components/Home/Home"
-import NameProvider from './contexts/NameContext';
+import UserProvider from './contexts/UserContext';
 
 
 const Routes = () => {
   return (
     <BrowserRouter>
     <Switch>
-      <NameProvider>
+      <UserProvider>
         <Route path="/" exact component={Home} />
         <Route path="/chat" component={Chat} />
-      </NameProvider>
+      </UserProvider>
     </Switch>
     </BrowserRouter>
   )
