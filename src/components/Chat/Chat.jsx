@@ -6,7 +6,7 @@ import './Chat.css'
 
 
 
-const socket = io('http://localhost:8080/')
+const socket = io('https://mychatbackend/')
 socket.on('connect',()=>{
         console.log('conectato ao soket.io')
     })
